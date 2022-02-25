@@ -1,0 +1,14 @@
+{
+  "name": "webfinger",
+  "version": "1.0.0",
+  "main": "src/finger.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
