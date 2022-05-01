@@ -12,7 +12,7 @@ export default class SqlSingleton {
         this.sql = sql;
     }
 
-    query(q, data = []) {
+    static query(q, data = []) {
         return new Promise((res, rej) => {
             SqlSingleton.sql.query(q, data, (err, dbData) => {
                 if (err) rej(err.message);
