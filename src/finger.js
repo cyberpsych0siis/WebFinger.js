@@ -1,5 +1,5 @@
 import URL from 'url';
-import { lookupIdentifier } from './lookup.js';
+import { lookupIdentifier, createDataEntry } from './lookup.js';
 import sql from './sql.js';
 
 /**
@@ -46,7 +46,9 @@ export const webfingerListener = function (req, res) {
             if (data) {
                 
                 //Convert the data to JSON String
-                const finalData = JSON.stringify(data);
+                const finalData = JSON.stringify(data.map(data => {
+                    return createDataEntry(data);
+                }));
                 
                 //...return status 200 and the data in the body as json...
                 res.writeHead(200, "Success", {

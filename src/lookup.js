@@ -16,10 +16,8 @@ export const lookupIdentifier = async function (identifier) {
         console.log(userdata);
 
         if (userdata) {
-            Object.assign(userdata, {subject: href});
-            return userdata.map(data => {
-                return createDataEntry(data);
-            });
+            //Object.assign(userdata, {subject: href});
+            return userdata
         }
     }
 
