@@ -1,6 +1,6 @@
 import { getDomain } from "./finger.js";
 import dotenv from 'dotenv';
-import { query } from "./sql.js";
+import SqlSingleton from './sql.js';
 dotenv.config();
 
 
@@ -53,5 +53,5 @@ async function searchForUserdata(sqlAdapter, name) {
     //needed for keys
     //sql.query("SELECT `publicKey` FROM `userKeys` WHERE username = ?",
 
-    return query("SELECT `username` FROM `userKeys` WHERE username = ?", [name]);
+    return SqlSingleton.query("SELECT `username` FROM `userKeys` WHERE username = ?", [name]);
 }
