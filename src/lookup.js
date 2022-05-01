@@ -1,24 +1,19 @@
 import { getDomain } from "./finger.js";
 import dotenv from 'dotenv';
+import { query } from "./sql.js";
 dotenv.config();
-import mysql from 'mysql2';
 
-const sql = mysql.createConnection({
-    host: process.env.MYSQL_HOST ?? "localhost",
-    user: process.env.MYSQL_USER ?? "root",
-    password: process.env.MYSQL_PASS ?? "",
-    database: process.env.MYSQL_DATABASE ?? "banana-msg"
-});
 
 const useStrictDomainChecking = function() {
     return Boolean(process.env.STRICT_DOMAIN_CHECKING ?? "true") == true;
 }
 
-export const lookupIdentifier = function (identifier) {
+export const lookupIdentifier = async function (identifier) {
     const { protocol, href, auth, hostname } = identifier;
     if (protocol === "acct:" && (useStrictDomainChecking() || hostname === getDomain())) {
         //search for auth in database
-        const userdata = searchForUserdata(auth);
+        const userdata = await searchForUserdata(auth);
+        console.log(userdata);
 
         if (userdata) {
             Object.assign(userdata, {subject: href});
@@ -29,22 +24,34 @@ export const lookupIdentifier = function (identifier) {
     return null;
 }
 
-function searchForUserdata(name) {
-    if (name === "example") {
-        return {
-            subject: null,
-            aliases: [
-                "http://localhost"
-            ],
-            links: [
-                {
-                    "rel": "http://webfinger.net/rel/profile-page",
-                    "type": "text/html",
-                    "href": "http://localhost"
-                }
-            ]
-        }
-    }
+export function createDataEntry(subjectName) {
+    let ownAddress = process.env.JWT_AUDENIENCES ?? "http://localhost";
     
-    return null;
+    return {
+        subject: null,
+        aliases: [
+            ownAddress
+        ],
+        links: [
+            {
+                //rel="publickey" type="text/plain" title="Public Key" href="http://rasterweb.net/raster/pgpkey.txt"
+                "rel": "http://webfinger.net/rel/profile-page",
+                "type": "text/html",
+                "href": "http://localhost"
+            },
+            {
+                "rel": "publickey",
+                "type": "text/plain",
+                "href": ownAddress + "/.well-known/keys?resource=acct" + subjectName + "@" + ownAddress
+            }
+        ]
+    }
+}
+
+async function searchForUserdata(sqlAdapter, name) {
+
+    //needed for keys
+    //sql.query("SELECT `publicKey` FROM `userKeys` WHERE username = ?",
+
+    return query("SELECT `username` FROM `userKeys` WHERE username = ?", [name]);
 }

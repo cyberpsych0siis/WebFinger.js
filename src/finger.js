@@ -1,4 +1,3 @@
-import http from 'http';
 import URL from 'url';
 import { lookupIdentifier } from './lookup.js';
 
@@ -7,7 +6,7 @@ import { lookupIdentifier } from './lookup.js';
  * @returns {number} the port as number
  */
 export const getPort = function() {
-    return process.env.PORT ?? 8080;
+    return process.env.PORT ?? 80;
 }
 
 /**
@@ -32,35 +31,37 @@ export const getDomain = function() {
  * @param {http.ServerResponse} res The Response object
  * @returns 
  */
-const webfingerListener = function (req, res) {
+export const webfingerListener = function (req, res) {
     const query = new URLSearchParams(URL.parse(req.url).query);
 
     //only process requests that have the resource query set
     if (query.has("resource")) {
 
         //lookup account identifier
-        const data = lookupIdentifier(URL.parse(query.get("resource")));
+        lookupIdentifier(URL.parse(query.get("resource"))).then(data => {
 
-        //if lookup was successful and a user was found...
-        if (data) {
-
-            //Convert the data to JSON String
-            const finalData = JSON.stringify(data);
-
-            //...return status 200 and the data in the body as json...
-            res.writeHead(200, "Success", {
-                "Content-Length": Buffer.byteLength(finalData),
-                "Content-Type": "application/json"
-            });
-            res.end(finalData);
-            return;
-
-        //...else data is null and we couldn't find the user. Return HTTP Code 404 and end the connection
-        } else {
-            res.writeHead(404);
-            res.end();
-            return;
-        }
+            
+            //if lookup was successful and a user was found...
+            if (data) {
+                
+                //Convert the data to JSON String
+                const finalData = JSON.stringify(data);
+                
+                //...return status 200 and the data in the body as json...
+                res.writeHead(200, "Success", {
+                    "Content-Length": Buffer.byteLength(finalData),
+                    "Content-Type": "application/json"
+                });
+                res.end(finalData);
+                return;
+                
+                //...else data is null and we couldn't find the user. Return HTTP Code 404 and end the connection
+            } else {
+                res.writeHead(404);
+                res.end();
+                return;
+            }
+        });
 
     //if not send "Bad Request" and end the connection
     } else {
@@ -70,5 +71,6 @@ const webfingerListener = function (req, res) {
     }
 }
 
-const server = http.createServer(webfingerListener);
-server.listen(getPort(), getHost(), () => {console.log("Webfinger instance running on " + getHost() + ":" + getPort())});
+export default (app, mysql = null) => {
+    app.get(".well-known/webfinger", webfingerListener);
+}
