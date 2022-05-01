@@ -60,7 +60,7 @@ export const webfingerListener = function (req, res) {
                 
                 //...else data is null and we couldn't find the user. Return HTTP Code 404 and end the connection
             } else {
-                console.log("Request didn't yield any results" + query)
+                console.log("Request didn't yield any results " + query)
                 res.writeHead(404);
                 res.end();
                 return;

@@ -21,7 +21,7 @@ export default class SqlSingleton {
                 }
     
                 if (data.length == 0) {
-                    rej(new Error("Not found"))
+                    rej(new Error("Not found in database"))
                     return;
                 }
 
