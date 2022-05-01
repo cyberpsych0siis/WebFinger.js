@@ -28,7 +28,7 @@ export function createDataEntry(subjectName) {
     let ownAddress = process.env.JWT_AUDENIENCES ?? "http://localhost";
     
     return {
-        subject: null,
+        subject: ownAddress + "/profile/" + subjectName,
         aliases: [
             ownAddress
         ],
@@ -53,5 +53,5 @@ async function searchForUserdata(name) {
     //needed for keys
     //sql.query("SELECT `publicKey` FROM `userKeys` WHERE username = ?",
 
-    return await SqlSingleton.query("SELECT `username` FROM `userKeys` WHERE username = ?", [name]);
+    return await SqlSingleton.query("SELECT `username`, `publicKey` FROM `userKeys` WHERE username = ?", [name]);
 }
