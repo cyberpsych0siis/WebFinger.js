@@ -1,6 +1,7 @@
 import { getDomain } from "./finger.js";
 import dotenv from 'dotenv';
 import SqlSingleton from './sql.js';
+import { v4 as uuidv4 } from 'uuid';
 dotenv.config();
 
 
@@ -28,6 +29,7 @@ export function createDataEntry(subjectName) {
     let ownAddress = process.env.JWT_AUDENIENCES ?? "http://localhost";
     
     return {
+        id: uuidv4(),
         subject: ownAddress + "/profile/" + subjectName,
         aliases: [
             ownAddress
