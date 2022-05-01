@@ -26,7 +26,7 @@ export const lookupIdentifier = async function (identifier) {
 }
 
 export function createDataEntry(subjectName) {
-    let ownAddress = process.env.JWT_AUDENIENCES ?? "http://localhost";
+    let ownAddress = process.env.JWT_AUDENIENCE ?? "http://localhost";
     
     return {
         id: uuidv4(),
