@@ -17,7 +17,9 @@ export const lookupIdentifier = async function (identifier) {
 
         if (userdata) {
             Object.assign(userdata, {subject: href});
-            return userdata;
+            return userdata.map(data => {
+                return createDataEntry(data);
+            });
         }
     }
 
@@ -53,5 +55,5 @@ async function searchForUserdata(name) {
     //needed for keys
     //sql.query("SELECT `publicKey` FROM `userKeys` WHERE username = ?",
 
-    return await SqlSingleton.query("SELECT `username` FROM `userKeys` WHERE username = ?", [name].map(s => { return createDataEntry(s) }));
+    return await SqlSingleton.query("SELECT `username` FROM `userKeys` WHERE username = ?", [name]);
 }
