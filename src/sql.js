@@ -15,9 +15,17 @@ export default class SqlSingleton {
     static query(q, data = []) {
         return new Promise((res, rej) => {
             SqlSingleton.sql.query(q, data, (err, dbData) => {
-                if (err) rej(err.message);
+                if (err) { 
+                    rej(err.message);
+                    return;
+                }
     
-                if (data.length == 0) rej("Not found")
+                if (data.length == 0) {
+                    rej(new Error("Not found"))
+                    return;
+                }
+
+                console.log(data);
     
                 res(data);
             });
