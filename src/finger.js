@@ -1,5 +1,6 @@
 import URL from 'url';
 import { lookupIdentifier } from './lookup.js';
+import sql from './sql.js';
 
 /**
  * Returns the value set in $PORT. Returns 80 if nothing is specified
@@ -72,5 +73,6 @@ export const webfingerListener = function (req, res) {
 }
 
 export default (app, mysql = null) => {
+    if (!mysql) sql.setSql(sql);
     app.get(".well-known/webfinger", webfingerListener);
 }
