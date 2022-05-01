@@ -7,7 +7,7 @@ import { lookupIdentifier } from './lookup.js';
  * @returns {number} the port as number
  */
 export const getPort = function() {
-    return process.env.PORT ?? 80;
+    return process.env.PORT ?? 8080;
 }
 
 /**
@@ -15,7 +15,7 @@ export const getPort = function() {
  * @returns {string} Host-IP as string
  */
 export const getHost = function() {
-    return process.env.HOST ?? "0.0.0.0";
+    return process.env.JWT_AUDIENCE ?? "0.0.0.0";
 }
 
 /**
@@ -23,7 +23,7 @@ export const getHost = function() {
  * @returns {string} Domain as string
  */
 export const getDomain = function() {
-    return process.env.DOMAIN ?? "localhost";
+    return process.env.JWT_AUDIENCE ?? "localhost";
 }
 
 /**

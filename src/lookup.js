@@ -1,4 +1,14 @@
 import { getDomain } from "./finger.js";
+import dotenv from 'dotenv';
+dotenv.config();
+import mysql from 'mysql2';
+
+const sql = mysql.createConnection({
+    host: process.env.MYSQL_HOST ?? "localhost",
+    user: process.env.MYSQL_USER ?? "root",
+    password: process.env.MYSQL_PASS ?? "",
+    database: process.env.MYSQL_DATABASE ?? "banana-msg"
+});
 
 const useStrictDomainChecking = function() {
     return Boolean(process.env.STRICT_DOMAIN_CHECKING ?? "true") == true;
