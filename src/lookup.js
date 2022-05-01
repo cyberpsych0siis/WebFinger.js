@@ -48,7 +48,7 @@ export function createDataEntry(subjectName) {
     }
 }
 
-async function searchForUserdata(sqlAdapter, name) {
+async function searchForUserdata(name) {
 
     //needed for keys
     //sql.query("SELECT `publicKey` FROM `userKeys` WHERE username = ?",
